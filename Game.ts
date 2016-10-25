@@ -2,12 +2,24 @@ import {Food, createRandomFood, NormalFood, FastApple, PoisonApple} from "./Food
 import {Snake, Direction} from "./Snake";
 import {Board} from "./Board";
 
+interface GameConfig {
+    controls: ControlsConfig;
+    positionClass: string;
+}
+
+interface ControlsConfig {
+    controlUp: number;
+    controlRight: number;
+    controlDown: number;
+    controlLeft: number;
+}
+
 export class Game {
     board: Board;
     snake: Snake;
     foodArray: Food[];
-    container: HTMLElement;
-    interval: number = 500;
+    boardContainer: HTMLElement;
+    interval: number = 400;
     actualInterval: number = this.interval;
 
     constructor() {
@@ -15,11 +27,11 @@ export class Game {
         this.foodArray = [];
     }
 
-    isBoardFulfilled() {
+    private isBoardFulfilled() {
         return this.snake ? (this.snake.getBody().length + this.foodArray.length >= this.board.height * this.board.width) : false;
     }
 
-    getEmptyRandomCell() {
+    private getEmptyRandomCell() {
         while (!this.isBoardFulfilled()) {
             const cell = this.board.getRandomCell();
             const foundFood = this.foodArray.some(food => food.cell.isEqual(cell))
@@ -42,14 +54,18 @@ export class Game {
         }
     }
 
-    createFood() {
+    private createFood() {
         const foodCell = this.getEmptyRandomCell();
 
         const food = createRandomFood(foodCell);
         this.foodArray.push(food);
     }
 
-    applyActualInterval() {
+    private removeExpiredFood() {
+        this.foodArray = this.foodArray.filter(food => food.isAlive());
+    }
+
+    private applyActualInterval() {
         this.interval = this.actualInterval;
     }
 
@@ -79,7 +95,7 @@ export class Game {
         }, 2500)
     }
 
-    start() {
+    start(startConfig: GameConfig) {
         const snakeCell = this.getEmptyRandomCell();
         this.snake = new Snake(snakeCell, Direction.Up);
 
@@ -87,32 +103,37 @@ export class Game {
             this.createFood();
         }
 
-        this.move();
-        this.render();
+        this.move(startConfig.controls);
+
+        this.render(startConfig.positionClass);
 
         setTimeout(() => {
-            this.step();
+            this.step(startConfig.positionClass);
         }, this.interval)
     }
 
-    move() {
-        document.onkeydown = (e) => {
-            if (e.keyCode == 38) {
+    private move(moveConfig: ControlsConfig) {
+        document.addEventListener('keydown', e => {
+            //38
+            if (e.keyCode == moveConfig.controlUp) {
                 return this.snake.setDirection(Direction.Up);
             }
-            else if (e.keyCode == 39) {
+            //39
+            else if (e.keyCode == moveConfig.controlRight) {
                 return this.snake.setDirection(Direction.Right);
             }
-            else if (e.keyCode == 40) {
+            //40
+            else if (e.keyCode == moveConfig.controlDown) {
                 return this.snake.setDirection(Direction.Down);
             }
-            else if (e.keyCode == 37) {
+            //37
+            else if (e.keyCode == moveConfig.controlLeft) {
                 return this.snake.setDirection(Direction.Left);
             }
-        }
+        })
     }
 
-    step() {
+    private step(positionClass: string) {
         this.snake.applyNextDirection();
 
         let nextCell = this.snake.createNextCell();
@@ -154,43 +175,43 @@ export class Game {
 
                 if (this.isBoardFulfilled()) {
                     this.youWin();
-                    this.render();
+                    this.render(positionClass);
                     return;
                 }
             } else {
                 this.snake.moveForward(nextCell);
             }
-            this.render();
+            this.render(positionClass);
             if (this.snake.getBody().length <= 0) {
                 this.gameOver();
             } else {
                 setTimeout(() => {
-                    this.step();
+                    this.step(positionClass);
                 }, this.interval);
             }
         }
     }
 
-    gameOver() {
+    private gameOver() {
         console.log('GAME OVER')
     }
 
-    youWin() {
+    private youWin() {
         console.log('YOU WIN');
     }
 
-    render() {
-        const container = document.createElement('div');
-        container.classList.add('container');
-        if (this.container) {
-            this.container.parentNode.replaceChild(container, this.container);
-        } else {
-            document.body.appendChild(container);
-        }
-        this.container = container;
 
+    private render(positionClass: string) {
+        const container = document.querySelector('.container');
         const boardContainer = document.createElement('div');
-        boardContainer.classList.add('board-container');
+        if (this.boardContainer) {
+            this.boardContainer.parentNode.replaceChild(boardContainer, this.boardContainer);
+        } else {
+            container.appendChild(boardContainer);
+        }
+        this.boardContainer = boardContainer;
+
+        boardContainer.classList.add('board-container', positionClass);
         container.appendChild(boardContainer);
 
         const cellDivs: HTMLElement[][] = []
@@ -243,9 +264,5 @@ export class Game {
             const snakeCell = cellDivs[foodY][foodX];
             snakeCell.classList.add('snake');
         }
-    }
-
-    private removeExpiredFood() {
-        this.foodArray = this.foodArray.filter(food => food.isAlive());
     }
 }

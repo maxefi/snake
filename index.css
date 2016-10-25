@@ -1,6 +1,12 @@
 @keyframes ants { to { background-position: 100% } }
 
+.container {
+    position: relative;
+}
+
 .board-container {
+    position: absolute;
+    top: 0;
     display: inline-block;
     border: 1px solid transparent;
     background:
@@ -11,8 +17,15 @@
     animation: ants 12s linear infinite;
 }
 
-.row {
+.board-container--left {
+    left: 0;
+}
 
+.board-container--right {
+    right: 0;
+}
+
+.row {
     font-size: 0;
 }
 
