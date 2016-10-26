@@ -17,7 +17,16 @@
   },
   "homepage": "https://github.com/maxefi/snake#readme",
   "devDependencies": {
+    "@types/classnames": "0.0.31",
+    "@types/react": "^0.14.42",
+    "@types/react-dom": "^0.14.18",
+    "classnames": "^2.2.5",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "rollup": "^0.36.3",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-watch": "^2.5.0"
   }

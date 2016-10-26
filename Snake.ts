@@ -72,6 +72,10 @@ export class Snake {
         this.body.unshift(nextCell);
     }
 
+    growBig(nextCells: Cell[]) {
+        this.body.unshift(...nextCells);
+    }
+
     growTail(lastCell: Cell) {
         this.body.push(lastCell);
     }
