@@ -1,5 +1,8 @@
-`npm i` for sure.
+# ![alt text](http://i.giphy.com/26BRwuIcSGcxGNaEM.gif "IT BITES")
 
-type `rollup -c` in your terminal to build the game.
+#### build
 
-open `index.html` to start it.
+- `npm i`;
+- `rollup -c`;
+
+*open* `index.html` *to play*.
