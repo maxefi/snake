@@ -22,7 +22,7 @@ export default {
             namedExports: {
                 // 'node_modules/mobx/lib/mobx.js': ['createElement', 'Component'],
                 'node_modules/mobx-react/index.js': ['observer'],
-                'node_modules/react/react.js': ['createElement', 'Component'],
+                'node_modules/react/react.js': ['createElement', 'Component', 'PropTypes'],
                 'node_modules/react-dom/index.js': ['render'],
                 "node_modules/classnames/index.js": ['classNames'],
             }

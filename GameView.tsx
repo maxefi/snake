@@ -16,7 +16,12 @@ export class GameView extends React.Component<GameViewProps, {}> {
             this.game.gameOver();
         }
 
-        this.game = new Game(this.props.config, () => {
+        this.game = new Game({controls: {
+            controlUp: 38,
+                controlRight: 39,
+                controlDown: 40,
+                controlLeft: 37
+        }}, () => {
             this.forceUpdate();
         });
 
@@ -85,9 +90,9 @@ export class GameView extends React.Component<GameViewProps, {}> {
                     }
                 </div>
                 <div className="stats">
-                    <div className="speed">Your snake moves each {this.game.interval}ms</div>
-                    <div className="score">Your score: {this.game.score}</div>
-                    <div className="score">Your high score: {this.game.highScore}</div>
+                    <div className="speed">snake moves each {this.game.interval}ms</div>
+                    <div className="score">score: {this.game.score}</div>
+                    <div className="score">high score: {this.game.highScore}</div>
                 </div>
             </div>
         );
