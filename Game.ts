@@ -25,6 +25,7 @@ export class Game {
     highScore: number = +localStorage.getItem('highScore') || 0;
     config: GameConfig;
     isGameOver: boolean = false;
+    isGameWon: boolean = false;
     render: ()=>void;
 
     constructor(config: GameConfig, render: ()=>void) {
@@ -69,6 +70,14 @@ export class Game {
         return nextCell;
     }
 
+    private createSnakeLastCell() {
+        const lastCell = this.snake.createCellBeforeTheLastCell();
+        if (!this.board.isCellInside(lastCell)) {
+            return this.board.thoughtTheBorder(lastCell);
+        }
+        return lastCell;
+    }
+
     private createFood() {
         const foodCell = this.getEmptyRandomCell();
 
@@ -104,8 +113,8 @@ export class Game {
         }
         if (food instanceof FastApple) {
             this.snake.grow(food.cell);
-            let nextNextCell = this.createSnakeNextCell();
-            this.snake.grow(nextNextCell);
+            let lastCell = this.createSnakeLastCell();
+            this.snake.growTail(lastCell);
             this.powerSpeed(2500);
             return;
         }
@@ -138,6 +147,7 @@ export class Game {
     private increaseSpeed() {
         if (this.interval > 100) {
             this.interval *= .9;
+            this.actualInterval = this.interval;
         }
     }
 
@@ -265,6 +275,7 @@ export class Game {
     }
 
     private youWin() {
-        console.log('YOU WIN');
+        this.isGameWon = true;
+        this.gameOver();
     }
 }

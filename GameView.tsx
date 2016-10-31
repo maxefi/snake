@@ -16,12 +16,14 @@ export class GameView extends React.Component<GameViewProps, {}> {
             this.game.gameOver();
         }
 
-        this.game = new Game({controls: {
-            controlUp: 38,
+        this.game = new Game({
+            controls: {
+                controlUp: 38,
                 controlRight: 39,
                 controlDown: 40,
                 controlLeft: 37
-        }}, () => {
+            }
+        }, () => {
             this.forceUpdate();
         });
 
@@ -78,19 +80,29 @@ export class GameView extends React.Component<GameViewProps, {}> {
                     {rows.map(cols =>
                         <div className="row">
                             {cols.map((cls) =>
-                                <div className={classNames(cls)}></div>
+                                <div className={classNames(cls)}>
+                                    <div className="y">y: {rows.indexOf(cols)}</div>
+                                    <div className="x">x: {cols.indexOf(cls)}</div>
+                                </div>
                             )}
                         </div>
                     )}
-                    {this.game.isGameOver &&
-                    <div className="game-over">
-                        <div className="game-over__text">Game Over</div>
-                        <button className="game-over__replay" onClick={() => this.onReplay()}>Replay</button>
-                    </div>
-                    }
+                    {this.game.isGameOver && (
+                        this.game.isGameWon ? (
+                            <div className="game-over">
+                                <div className="game-over__text game-over__text--won">Unbelievable</div>
+                                <button className="game-over__replay" onClick={() => this.onReplay()}>Replay</button>
+                            </div>
+                        ) : (
+                            <div className="game-over">
+                                <div className="game-over__text">Game Over</div>
+                                <button className="game-over__replay" onClick={() => this.onReplay()}>Replay</button>
+                            </div>
+                        )
+                    )}
                 </div>
                 <div className="stats">
-                    <div className="speed">snake moves each {this.game.interval}ms</div>
+                    <div className="speed">snake moves each {Math.round(this.game.interval)}ms</div>
                     <div className="score">score: {this.game.score}</div>
                     <div className="score">high score: {this.game.highScore}</div>
                 </div>

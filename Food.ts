@@ -24,17 +24,17 @@ export class NormalFood extends Food {
 
 export class FastApple extends Food {
     timeToLife = 2000;
-    points = 3;
+    points = 5;
 }
 
 export class PoisonApple extends Food {
     timeToLife = 4000;
-    points = 5;
+    points = 3;
 }
 
 export class Elephant extends Food {
     timeToLife = 4000;
-    points = 5;
+    points = 3;
 }
 
 export function createRandomFood(cell: Cell): Food {

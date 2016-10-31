@@ -30,6 +30,10 @@ export class Snake {
         return this.body[0].getNextCell(this.direction);
     }
 
+    createCellBeforeTheLastCell() {
+        return this.body[this.body.length - 1];
+    }
+
     moveForward(nextCell: Cell) {
         this.body.pop();
         this.body.unshift(nextCell);
@@ -70,10 +74,6 @@ export class Snake {
 
     grow(nextCell: Cell) {
         this.body.unshift(nextCell);
-    }
-
-    growBig(nextCells: Cell[]) {
-        this.body.unshift(...nextCells);
     }
 
     growTail(lastCell: Cell) {
